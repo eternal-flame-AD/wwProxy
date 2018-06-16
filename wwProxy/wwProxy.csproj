@@ -86,6 +86,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ProxyMonitor.cs" />
     <Compile Include="ProxySwitcher.cs" />
     <Compile Include="WWproxy.cs" />
     <Compile Include="Form1.cs">

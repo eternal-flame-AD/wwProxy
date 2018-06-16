@@ -16,6 +16,7 @@ namespace wwProxy
         private WWProxyProvider wwproxy = new WWProxyProvider();
         List<Country> countrylist;
         ProxyCollection proxylist;
+        ProxyMonitor proxymonitor;
         public Form1()
         {
             InitializeComponent();
@@ -136,15 +137,12 @@ namespace wwProxy
 
         private void proxySelection_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.StartBusy("Testing...");
             var SelectedProxy = proxylist[this.proxySelection.SelectedIndex];
-            Ping tester = new Ping();
-            PingReply reply = tester.Send(SelectedProxy.ip, 5);
-            if (reply.Status == IPStatus.Success)
-            {
-                this.StopBusy(SelectedProxy.ip + " " + reply.RoundtripTime.ToString() + "ms");
-            } else
-                this.StopBusy(SelectedProxy.ip + " " + reply.Status.ToString());
+            if (this.proxymonitor!=null) {
+                this.proxymonitor.Destroy();
+            }
+            this.proxymonitor = new ProxyMonitor(SelectedProxy.ip);
+            this.proxymonitor.StartMonitor(new ProxyMonitorReturn(delegate(string ret) { this.StatusLabel.Text = SelectedProxy.ip + " " + ret; }));
         }
     }
 }
